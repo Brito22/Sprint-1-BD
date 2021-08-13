@@ -1,39 +1,43 @@
-USE MUSICA
+USE OPTUSempresa
 GO
 
-INSERT INTO EMPRESA (Nome_da_Empresa)
-VALUES ('NATHCANTORA')
+SELECT * FROM EMPRESA;
+SELECT * FROM ARTISTA;
+SELECT * FROM ESTILO;
+SELECT * FROM VISIBILIDADE;
+SELECT * FROM PLATAFORMA;
+SELECT * FROM ALBUM;
+SELECT * FROM PERMISSAO;
+SELECT * FROM USUARIO;
 
-SELECT * FROM EMPRESA
 
-INSERT INTO ARTISTA (IdEmpresa, Nome_do_Artista)
-VALUES (1,'NATHALIA NOVAIS'), (1,'PEDRO FIGUEIRA')
 
-SELECT * FROM ARTISTA
+-- Listar todos os usuários administradores, sem exibir suas senhas
 
-INSERT INTO ALBUNS (IdArtista, Nome_do_Album)
-VALUES (1,'EVIDENCIAS'),(2,'ALONVBEV') 
+SELECT IdUsuario, tipoPermissao, nomeUsuario, emailUsuario FROM USUARIO
+RIGHT JOIN PERMISSAO
+ON PERMISSAO.IdPermissao = USUARIO.IdPermissao
+WHERE tipoPermissao = 'Administrador'
 
-SELECT * FROM ALBUNS
 
-INSERT INTO ESTILO (IdAlbuns, Genero)
-VALUES (1,'ROMANTICO'), (2,'SERTANEJO')
+-- Listar todos os álbuns lançados após o um determinado ano de lançamento
 
-SELECT * FROM ESTILO
+SELECT * FROM ALBUM WHERE (dataLancamento > '03/03')
 
-INSERT INTO PLATAFORMA (IdAlbuns, Descricao)
-VALUES (1,'SPOTIFYVI'), (2,'DEEZER')
 
-SELECT * FROM PLATAFORMA
-
-INSERT INTO USUARIO (IdPlataforma, Nome, Email, Senha)
-VALUES (1, 'PEDRÃO', 'FIGUEIRAPEDRO@GMAIL', 'LALA'), (2, 'NATH', 'NOVAISNATHALIA@GMAIL','LELE')
+-- Listar os dados de um usuário através do e-mail e senha
 
 SELECT * FROM USUARIO
+WHERE emailUsuario = 'l@email.com' AND senhaUsuario = '123';
 
-SELECT * FROM EMPRESA
-SELECT * FROM ARTISTA
-SELECT * FROM ALBUNS
-SELECT * FROM ESTILO
-SELECT * FROM PLATAFORMA
-SELECT * FROM USUARIO
+
+-- Listar todos os álbuns ativos, mostrando o nome do artista e os estilos do álbum 
+
+SELECT  nomeArtista, nomeEstilo,nomeAlbum,descricao FROM ALBUM
+LEFT JOIN ARTISTA
+ON ARTISTA.IdArtista = ALBUM.IdArtista
+LEFT JOIN ESTILO
+ON ESTILO.IdEstilo = ALBUM.IdEstilo
+LEFT JOIN VISIBILIDADE
+ON VISIBILIDADE.IdVisibilidade = ALBUM.IdVisibilidade
+WHERE descricao = 'Ativo';
